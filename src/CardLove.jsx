@@ -1,4 +1,4 @@
-import React,{ useRef } from "react";
+import React,{ useEffect, useRef,useState } from "react";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -7,6 +7,7 @@ import { Image } from "primereact/image";
 import { Divider } from "primereact/divider";
 import html2canvas from "html2canvas";
 import { Button } from "primereact/button";
+ 
 export const CardLove = () => {
   const cardRef = useRef(null);
   const handleCaptureScreenshot = () => {
@@ -20,7 +21,38 @@ export const CardLove = () => {
       });
     }
   };
+  const [isVisible, setIsVisible] = useState(false);  
+  useEffect(() => {
+    // Fecha objetivo: 13 de febrero de 2025 a las 10:00 PM
+    const targetDate = new Date("2025-02-13T23:59:59");
+    const currentDate = new Date();
 
+    // Comparar la fecha actual con la fecha objetivo
+    if (currentDate >= targetDate) {
+      setIsVisible(true); // Mostrar el componente si la fecha actual es posterior o igual
+    }
+  }, []);
+  if (!isVisible) {
+    return (
+      <div
+      className="flex justify-content-center align-items-center"
+      style={{ height: "100vh", flexDirection: "column" }} // Cambia a columna
+    >
+      {/* Imagen arriba */}
+      <Image
+        src="../images/loader.gif"
+        alt="Cargando..."
+        width="500" // Ajusta el tamaño según necesites
+        className="mb-4" // Margen inferior para separar la imagen del texto
+      />
+
+      {/* Texto abajo */}
+      <h2 style={{ textAlign: "center" }}>
+       Fanny mi amor, el contenido no está disponible hasta el 13 de febrero de 2025 a las 12:00 PM.
+      </h2>
+    </div>
+    );
+  }
   return (
     <div
       className="flex justify-content-center align-items-end "
