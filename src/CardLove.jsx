@@ -1,4 +1,4 @@
-import React,{ useEffect, useRef,useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -7,9 +7,11 @@ import { Image } from "primereact/image";
 import { Divider } from "primereact/divider";
 import html2canvas from "html2canvas";
 import { Button } from "primereact/button";
- 
+
 export const CardLove = () => {
   const cardRef = useRef(null);
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const handleCaptureScreenshot = () => {
     if (cardRef.current) {
       html2canvas(cardRef.current).then((canvas) => {
@@ -21,7 +23,7 @@ export const CardLove = () => {
       });
     }
   };
-  const [isVisible, setIsVisible] = useState(false);  
+  const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     // Fecha objetivo: 13 de febrero de 2025 a las 10:00 PM
     const targetDate = new Date("2025-02-13T23:59:59");
@@ -35,32 +37,50 @@ export const CardLove = () => {
   if (!isVisible) {
     return (
       <div
-      className="flex justify-content-center align-items-center"
-      style={{ height: "100vh", flexDirection: "column" }} // Cambia a columna
-    >
-      {/* Imagen arriba */}
-      <Image
-        src="../images/loader.gif"
-        alt="Cargando..."
-        width="500" // Ajusta el tamaño según necesites
-        className="mb-4" // Margen inferior para separar la imagen del texto
-      />
+        className="flex justify-content-center align-items-center"
+        style={{ height: "100vh", flexDirection: "column" }} // Cambia a columna
+      >
+        {/* Imagen arriba */}
+        <Image
+          src="../images/loader.gif"
+          alt="Cargando..."
+          width="500" // Ajusta el tamaño según necesites
+          className="mb-4" // Margen inferior para separar la imagen del texto
+        />
 
-      {/* Texto abajo */}
-      <h2 style={{ textAlign: "center" }}>
-       Fanny mi amor, el contenido no está disponible hasta el 13 de febrero de 2025 a las 12:00 PM.
-      </h2>
-    </div>
+        {/* Texto abajo */}
+        <h2 style={{ textAlign: "center" }}>
+          Fanny mi amor, el contenido no está disponible hasta el 13 de febrero
+          de 2025 a las 12:00 PM.
+        </h2>
+      </div>
     );
   }
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (audio.paused) {
+      audio.play();
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+    }
+  };
+  const restartSong = () => {
+    const audio = audioRef.current;
+    audio.currentTime = 0; // Reinicia el tiempo de reproducción a 0
+    if (!isPlaying) {
+      audio.play(); // Si estaba en pausa, comienza a reproducir
+      setIsPlaying(true);
+    }
+  };
   return (
     <div
       className="flex justify-content-center align-items-end "
       style={{ alignContent: "center" }}
     >
-      <Card 
-        ref={cardRef} 
-      style={{ borderRadius: "12px", overflow: "hidden" }}>
+      <Card ref={cardRef} style={{ borderRadius: "12px", overflow: "hidden" }}>
         <div
           className="flex flex-column md:flex-row "
           style={{
@@ -77,7 +97,29 @@ export const CardLove = () => {
             <div className="col-5 md:col-4 p-3 text-white">
               <Image src="../images/lateral2.png" />
               <Image src="../images/qr.png" height="200" />
-              <Button icon="pi pi-download" label="descargar" text onClick={handleCaptureScreenshot}/>
+              <Button
+                icon="pi pi-download"
+                label="descargar"
+                text
+                onClick={handleCaptureScreenshot}
+              />
+              <Button
+                icon={isPlaying ? "pi pi-pause" : "pi pi-play"} // Cambia el ícono según el estado
+                className="p-button-rounded p-button-success" // Estilo redondo
+                style={{ backgroundColor: "#2196F3", borderColor: "#2196F3" }}
+                onClick={togglePlay} // Maneja el clic
+              />
+              <Button
+                icon="pi pi-refresh" // Ícono de reiniciar
+                className="p-button-rounded p-button-danger" // Estilo redondo y color rojo
+                onClick={restartSong} // Maneja el clic
+                 
+              />
+              {/* Elemento de audio */}
+              <audio ref={audioRef}>
+                <source src="../music/laquemegusta.mp3" type="audio/mpeg" />
+                Tu navegador no soporta el elemento de audio.
+              </audio>
             </div>
           </div>
 
